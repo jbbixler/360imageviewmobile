@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360-degree Background Loader</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #permissionButton {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+        #backgroundIframe {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <button id="permissionButton">Enable 360° Background</button>
+    <iframe id="backgroundIframe" style="display:none;"></iframe>
+
+    <script>
+        const permissionButton = document.getElementById('permissionButton');
+        const backgroundIframe = document.getElementById('backgroundIframe');
+        const backgroundUrl = 'https://jbradbixler.com/wp-content/uploads/2024/10/360-background-wordpress-gyro-updated-1.html'; // Replace with your actual background HTML URL
+
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function loadBackground() {
+            backgroundIframe.src = backgroundUrl;
+            backgroundIframe.style.display = 'block';
+        }
+
+        if (isMobile()) {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                permissionButton.style.display = 'block';
+                permissionButton.addEventListener('click', function() {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(response => {
+                            if (response === 'granted') {
+                                loadBackground();
+                                permissionButton.style.display = 'none';
+                            }
+                        })
+                        .catch(console.error);
+                });
+            } else {
+                loadBackground();
+            }
+        } else {
+            loadBackground();
+        }
+    </script>
+</body>
+</html>

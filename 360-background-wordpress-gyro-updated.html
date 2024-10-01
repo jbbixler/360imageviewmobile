@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360-degree Background</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.2.0/aframe.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #background-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <a-scene id="background-scene" embedded vr-mode-ui="enabled: false">
+        <a-assets>
+            <img id="panoramaImage" src="https://jbbixler.github.io/360imageviewmobile/AdobeStock_336144820.jpeg" crossorigin="anonymous">
+        </a-assets>
+        <a-sky id="sky" src="#panoramaImage" rotation="0 0 0"></a-sky>
+        <a-entity id="rig" rotation="0 0 0">
+            <a-camera id="camera" look-controls="enabled: true; reverseMouseDrag: true;"></a-camera>
+        </a-entity>
+    </a-scene>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sky = document.getElementById('sky');
+            const camera = document.getElementById('camera');
+            let rotationY = 0;
+            const speed = 0.01;
+
+            function isMobile() {
+                return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            }
+
+            function animate() {
+                if (!isMobile()) {
+                    rotationY += speed;
+                    sky.setAttribute('rotation', {x: 0, y: rotationY, z: 0});
+                    requestAnimationFrame(animate);
+                }
+            }
+
+            if (isMobile()) {
+                camera.setAttribute('look-controls', 'enabled: true; reverseMouseDrag: true; touchEnabled: true; magicWindowTrackingEnabled: true;');
+            } else {
+                animate();
+            }
+        });
+    </script>
+</body>
+</html>
