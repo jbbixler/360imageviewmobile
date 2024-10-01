@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>360-degree Image Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.2.0/aframe.min.js"></script>
+    <style>
+        #fileInput {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="fileInput" accept="image/*">
+    <a-scene>
+        <a-sky id="panorama" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Skafta%CC%81rfellsjo%CC%88kull%2C_Iceland_360°_Panorama.jpg/2560px-Skafta%CC%81rfellsjo%CC%88kull%2C_Iceland_360°_Panorama.jpg" rotation="0 -90 0"></a-sky>
+        <a-camera>
+            <a-cursor></a-cursor>
+        </a-camera>
+    </a-scene>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const panoramaSky = document.getElementById('panorama');
+
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        panoramaSky.setAttribute('src', e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
